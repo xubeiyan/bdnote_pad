@@ -1,10 +1,11 @@
 {
   "name": "bdnote_pad",
   "version": "0.0.1",
-  "description": "bdnote for harminica",
+  "description": "bdnote for harmonica",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+	"start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/xubeiyan/bdnote_pad#readme",
   "dependencies": {
-    "koa": "^2.6.2"
+    "koa": "^2.6.2",
+    "koa-router": "^7.4.0"
   }
 }
