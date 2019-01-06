@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/xubeiyan/bdnote_pad/issues"
   },
-  "homepage": "https://github.com/xubeiyan/bdnote_pad#readme"
+  "homepage": "https://github.com/xubeiyan/bdnote_pad#readme",
+  "dependencies": {
+    "koa": "^2.6.2"
+  }
 }
