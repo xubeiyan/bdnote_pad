@@ -1,0 +1,19 @@
+body {
+	background-color: #EEE;
+	margin: 0;
+}
+
+div.container {
+	background-color: #FFF;
+	width: 1100px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 5em;
+	padding-right: 5em;
+}
+
+h1 {
+	margin: 0;
+	padding-top: 1em;
+	padding-bottom: 0.8em;
+}
