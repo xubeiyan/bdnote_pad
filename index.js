@@ -5,6 +5,10 @@ const path = require('path');
 // 一些配置
 const config = require('./config/config.json');
 
+// sqlite3
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('./db/bdnote.db');
+
 // 静态资源
 const static = require('koa-static');
 app.use(static(path.join(__dirname, config.staticPath)));
