@@ -33,6 +33,12 @@ router.get('/', async (ctx, next) => {
 			sub_title: 'Index'
 		});
 	})
+	// 查看乐谱列表
+	.get('/sheet/list/:page/per/:per/mode/:mode', async (ctx, next) => {
+		let {page, per, mode} = ctx.params;
+		console.log(page, per, mode);
+		// console.log(ctx.request)
+	})
 	// 查看某个乐谱
 	.get('/sheet/:id', async (ctx, next) => {
 		await ctx.render('sheet', {
