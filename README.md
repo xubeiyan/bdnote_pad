@@ -28,10 +28,11 @@
 #### 路由设计
 
 * `/` 主页
-* `/sheet/list/{:page}/per/{:per}/mode/{:mode}` 列表第几页(page)（默认1），以及每页多少个(per)（默认20，最大20，最少5），显示模式(mode)(simple & full)
+* `/sheet/list/{:page}` 列表第几页(page)（默认1）(每页项目数和显示模式还是写到前端去得了)
 * `/sheet/show/{id}` 显示id为对应值的乐谱
 * `/notfound` 未找到页面
 * `/sheet/upload` 上传新的乐谱
 * `/sheet/uploadpost` 接收乐谱上传
 * `/sheet/delete/{id}` 准备删除对应的乐谱 
 * `/sheet/deletepost` 删除乐谱
+* `/help` 帮助页面

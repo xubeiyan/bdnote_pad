@@ -33,11 +33,13 @@ router.get('/', async (ctx, next) => {
 			sub_title: 'Index'
 		});
 	})
+	// 快速列表
+	.get('/sheet/list', (ctx, next) => {
+		ctx.redirect('/sheet/list/1');
+	})
 	// 查看乐谱列表
-	.get('/sheet/list/:page/per/:per/mode/:mode', async (ctx, next) => {
-		let {page, per, mode} = ctx.params;
-		console.log(page, per, mode);
-		// console.log(ctx.request)
+	.get('/sheet/list/:page', async (ctx, next) => {
+		let {page} = ctx.params;
 	})
 	// 查看某个乐谱
 	.get('/sheet/:id', async (ctx, next) => {
@@ -49,6 +51,12 @@ router.get('/', async (ctx, next) => {
 	.get('/notfound', async (ctx, next) => {
 		await ctx.render('404', {
 			sub_title: 'Not Found'
+		});
+	})
+	// 帮助
+	.get('/help', async (ctx, next) => {
+		await ctx.render('help', {
+			sub_title: 'Help',
 		});
 	});
 

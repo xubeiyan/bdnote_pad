@@ -39,6 +39,11 @@ footer {
 	background-color: #CCC;
 }
 
+footer div.container {
+	display: flex;
+	justify-content: space-between;
+	padding-top: 1em;
+}
 div.container {
 	width: 1200px;
 	margin-left: auto;
@@ -49,4 +54,12 @@ h1 {
 	margin: 0;
 	padding-top: 1em;
 	padding-bottom: 0.8em;
+}
+
+span.code {
+	background-color: #CCC;
+	font-weight: bold;
+	padding-left: 0.3em;
+	padding-right: 0.3em;
+	border-radius: 0.2em;
 }
