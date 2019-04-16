@@ -5,9 +5,8 @@ const path = require('path');
 // 一些配置
 const config = require('./config/config.json');
 
-// sqlite3
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./db/bdnote.db');
+// 数据库读写api
+const db = require('./db.js');
 
 // 静态资源
 const static = require('koa-static');
@@ -40,11 +39,23 @@ router.get('/', async (ctx, next) => {
 	// 查看乐谱列表
 	.get('/sheet/list/:page', async (ctx, next) => {
 		let {page} = ctx.params;
+		let itemPerPage = config.itemPerPage;
+		let result = await db.getNoteListsByPage(page, itemPerPage);
+		
+		await ctx.render('sheet_list', {
+			sub_title: 'Sheet List',
+			per: itemPerPage,
+			page: page,
+			result: result,
+		});
 	})
 	// 查看某个乐谱
 	.get('/sheet/:id', async (ctx, next) => {
+		let note = await db.getNoteById(1); 
+		console.log(note);
 		await ctx.render('sheet', {
-			sub_title: 'Sheet'
+			sub_title: 'Sheet',
+			result: note.title,
 		});
 	})
 	// 未找到

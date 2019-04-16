@@ -1,0 +1,15 @@
+<div class="container">
+	<h1>Sheet lists of page <%=page%> (<%=per%> items per page)</h1>
+	<hr>
+	<% result.forEach(function(item){ %>
+	<p>
+		<span><%=item.id%></span>
+		<span>|</span>
+		<span><%=item.title%></span>
+		<span>|</span>
+		<span><%=item.composer%></span>
+		<span>|</span>
+		<span><a href="/sheet/<%=item.id%>">Link</a></span>
+	</p>
+	<% }) %>
+</div>

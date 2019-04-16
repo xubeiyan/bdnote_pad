@@ -6,5 +6,6 @@
 		"layout":	"template",
 		"cache": 	false,
 		"debug": 	false
-	}
+	},
+	"itemPerPage": 20
 }
