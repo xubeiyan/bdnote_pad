@@ -63,3 +63,34 @@ span.code {
 	padding-right: 0.3em;
 	border-radius: 0.2em;
 }
+
+span.title {
+	font-weight: lighter;
+}
+
+textarea.bdnote {
+	width: 100%;
+	min-height: 300px;
+	font-size: large;
+}
+
+label.info {
+	width: 20%;
+	display: inline-block;
+}
+
+input.info {
+	width: 79%;
+}
+
+p.middle {
+	display: flex;
+	justify-content: center;
+}
+
+p.middle button.submit {
+	width: 20em;
+	height: 2.5em;
+	margin-left: auto;
+	margin-right: auto;
+}

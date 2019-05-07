@@ -49,13 +49,27 @@ router.get('/', async (ctx, next) => {
 			result: result,
 		});
 	})
+	// 上传乐谱页面
+	.get('/sheet/upload', async (ctx, next) => {
+		await ctx.render('upload', {
+			sub_title: 'Upload',
+		});
+	})
 	// 查看某个乐谱
 	.get('/sheet/:id', async (ctx, next) => {
-		let note = await db.getNoteById(1); 
-		console.log(note);
+		let {id} = ctx.params;
+		let note = await db.getNoteById(id); 
+		if (typeof note == "undefined") {
+			ctx.redirect('/notfound');
+			return;
+		}
 		await ctx.render('sheet', {
 			sub_title: 'Sheet',
-			result: note.title,
+			title: note.title,
+			composer: note.composer,
+			intro: note.intro,
+			bdnote: note.bdnote,
+			uploader: note.uploader,
 		});
 	})
 	// 未找到
@@ -74,4 +88,4 @@ router.get('/', async (ctx, next) => {
 app.use(router.routes());
 app.listen(config.port)
 
-console.log(`[demo] start-quick is starting at port ${config.port}`)
+console.log(`[INFO] BD note Pad is starting at port ${config.port}`)
