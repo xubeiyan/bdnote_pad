@@ -1,6 +1,6 @@
 import { AppBar, IconButton, Toolbar, Typography } from '@mui/material'
 
-import MenuIcon from '@mui/icons-material/Menu'
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
 
 import React from 'react'
 
@@ -8,12 +8,10 @@ function TopAppBar({ toggleMenu }) {
   return (
     <AppBar>
       <Toolbar variant='dense'>
-        <IconButton sx={{ color: `white` }}
-          onClick={toggleMenu}>
-          <MenuIcon />
+        <IconButton sx={{ color: `white` }}>
+          <MusicNoteIcon />
         </IconButton>
-        <Typography
-          sx={{ pl: `.5em` }}>BD Note Pad</Typography>
+        <Typography>BD Note Pad</Typography>
       </Toolbar>
     </AppBar>
   )

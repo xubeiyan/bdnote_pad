@@ -1,3 +1,6 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 import { Box, Paper, Toolbar } from "@mui/material";
 
 import { Routes, Route } from 'react-router-dom';
@@ -41,27 +44,32 @@ function App() {
     setSelected(index)
   }
 
+  const queryClient = new QueryClient();
+
   return (
-    <Box sx={{ bgcolor: `#ddd` }}>
-      <TopAppBar toggleMenu={toggleMenu} />
-      <SideMenu open={menu.open} closeMenu={closeMenu} />
-      <Toolbar />
-      <Paper sx={{
-        minHeight: 'calc(100vh - 48px - 56px - 1em)',
-        mx: `.5em`, mb: `.5em`, p: `.5em`,
-      }}
-        elevation={6}>
-        <Routes>
-          <Route index path='/' element={<Main />} />
-          <Route index path='/search' element={<Search />} />
-          <Route index path='/user' element={<User />} />
-        </Routes>
-      </Paper>
-      <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
-        elevation={3}>
-        <Navigation selected={selected} toPage={toPage} />
-      </Paper>
-    </Box>
+    <QueryClientProvider client={queryClient}>
+      <Box sx={{ bgcolor: `#ddd` }}>
+        <TopAppBar toggleMenu={toggleMenu} />
+        <SideMenu open={menu.open} closeMenu={closeMenu} />
+        <Toolbar />
+        <Paper sx={{
+          minHeight: 'calc(100vh - 48px - 56px - 1em)',
+          mx: `.5em`, mb: `.5em`, p: `.5em`,
+        }}
+          elevation={6}>
+          <Routes>
+            <Route index path='/' element={<Main />} />
+            <Route index path='/search' element={<Search />} />
+            <Route index path='/user' element={<User />} />
+          </Routes>
+        </Paper>
+        <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
+          elevation={3}>
+          <Navigation selected={selected} toPage={toPage} />
+        </Paper>
+      </Box>
+      <ReactQueryDevtools initialIsOpen={false} position='top-right'/>
+    </QueryClientProvider>
   )
 }
 
