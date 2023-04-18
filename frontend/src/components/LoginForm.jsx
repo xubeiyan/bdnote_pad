@@ -1,10 +1,13 @@
 import { Alert, Box, Button, Grid, Stack, TextField, Typography } from '@mui/material'
 import { useState } from 'react';
 
+import { useNavigate } from 'react-router-dom';
+
 import { useMutation } from '@tanstack/react-query';
 import { login } from '../api/userAPI';
 
-function LoginForm({ openRegisterDialog, setIsLogin }) {
+function LoginForm({ openRegisterDialog, handleLoginStatus, headerAlert }) {
+  const navi = useNavigate();
   // 登录所需用户名和密码
   const [loginForm, setLoginForm] = useState({
     username: '',
@@ -15,7 +18,7 @@ function LoginForm({ openRegisterDialog, setIsLogin }) {
   const [err, setErr] = useState({
     type: '',
     msg: '',
-  })
+  });
 
   // 改变值
   const handleInputChange = (field, value) => {
@@ -38,12 +41,18 @@ function LoginForm({ openRegisterDialog, setIsLogin }) {
         return;
       }
 
-      setIsLogin(true);
+      // 登录成功
+      const userInfo = resJSON.user;
+      handleLoginStatus({ userInfo });
+      window.localStorage.setItem('token', resJSON.token);
     },
   })
 
   return (
     <Box sx={{ m: `.5em` }}>
+      {headerAlert.type != '' ?
+        <Alert severity={headerAlert.type} >{headerAlert.msg}</Alert>
+        : null}
       <Typography variant='h4'
         sx={{ mt: `2em`, mb: `1em`, textAlign: 'center' }}>Log in</Typography>
       <Grid container spacing={1}>
