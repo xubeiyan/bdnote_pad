@@ -24,34 +24,34 @@ const register = async ({username, password, nickname}) => {
   }).then(res => res.json());
 }
 
-// 验证token
-const verifyToken = async ({username, token}) => {
-  return await fetch('/api/verifyToken', {
+// 获取用户信息
+const getUserInfo = async ({username, token}) => {
+  return await fetch('/api/getUserInfo', {
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
     },
     method: 'post',
     body: JSON.stringify({
       username,
-      token,
     })
   }).then(res => res.json());
 }
 
-// token
+// 重新申请token
 const renewToken = async ({username, token}) => {
   return await fetch('/api/renewToken', {
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
     },
     method: 'post',
     body: JSON.stringify({
       username,
-      token,
     })
   }).then(res => res.json());
 }
 
-export { login, register, verifyToken };
+export { login, register, getUserInfo };

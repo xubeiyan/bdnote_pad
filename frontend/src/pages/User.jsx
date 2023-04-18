@@ -3,7 +3,7 @@ import LoginForm from "../components/LoginForm";
 import RegisterDialog from "../components/RegisterDialog";
 
 import { useMutation } from '@tanstack/react-query';
-import { verifyToken } from '../api/userAPI';
+import { getUserInfo } from '../api/userAPI';
 
 import { getPayload } from "../utils/jwt";
 import { Typography } from "@mui/material";
@@ -38,7 +38,7 @@ function User() {
   }
 
   const mutation = useMutation({
-    mutationFn: verifyToken,
+    mutationFn: getUserInfo,
     onSuccess: (data) => {
       if (data.errcode == 'INVALID_JWT') {
         setIsLogin(false);
@@ -57,6 +57,7 @@ function User() {
       }
 
       setIsLogin(true);
+      setUser(data.user);
     }
   });
 
