@@ -32,6 +32,24 @@ const userLoginValidation = ({ username, password }) => {
 
 }
 
+// 获取用户信息
+const getUserInformation = ({ username }) => {
+  const stmt = db.prepare(
+    'SELECT `username`, `nickname` FROM `user` WHERE `username` = ? LIMIT 1'
+  ).bind([username]);
+
+  const info = stmt.get();
+
+  if (info == undefined) {
+    return {
+      username: 'unknown',
+      nickname: 'unkoown'
+    }
+  }
+
+  return { ...info };
+}
+
 // 用户注册
 const userRegister = ({ username, password, nickname }) => {
   const userExistStmt = db.prepare(`
@@ -51,7 +69,7 @@ const userRegister = ({ username, password, nickname }) => {
   });
 
   // 检查nickname
-  if (nickname == undefined || nickname  == null) {
+  if (nickname == undefined || nickname == null) {
     nickname = '';
   }
 
@@ -67,4 +85,4 @@ const userRegister = ({ username, password, nickname }) => {
   return 'REGISTER_SUCCESS';
 }
 
-export { userLoginValidation, userRegister }
+export { userLoginValidation, getUserInformation, userRegister }
