@@ -30,7 +30,17 @@ const genJWT = ({ username, expireTime = 60 * 30 }) => {
 }
 
 // 验证JSON web token合法性
-const verifyJWT = (jwt) => {
+const verifyJWT = (authStr) => {
+  // 首先验证格式，需要是'Bearer xxx.yyy.zzz形式
+  if (authStr.split(' ')[0] !== 'Bearer') {
+    return 'FORMAT_WRONG_JWT';
+  }
+
+  const jwt = authStr.split(' ')[1];
+  if (jwt == undefined || jwt.split('.').length != 3) {
+    return 'FORMAT_WRONG_JWT';
+  }
+
   const [
     headerBase64url, payloadBase64url, toVerifySignature
   ] = jwt.split('.');

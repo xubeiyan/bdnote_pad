@@ -18,27 +18,27 @@ router.post('/login', (req, res) => {
   const { username, password } = req.body;
   const result = userLoginValidation({ username, password });
 
-  let reqJSON = {
+  let resJSON = {
     api: 'login',
     msg: '未知错误'
   }
 
   if (result == 'USER_NOT_EXIST') {
-    reqJSON.errcode = 'INVALID_USER_OR_PASS';
-    reqJSON.msg = '用户名或密码错误';
+    resJSON.errcode = 'INVALID_USER_OR_PASS';
+    resJSON.msg = '用户名或密码错误';
   } else if (result == 'INVALID_PASSWORD') {
-    reqJSON.errcode = 'INVALID_USER_OR_PASS';
-    reqJSON.msg = '用户名或密码错误';
+    resJSON.errcode = 'INVALID_USER_OR_PASS';
+    resJSON.msg = '用户名或密码错误';
   } else if (result == "USER_BLOCKED") {
-    reqJSON.errcode = 'USER_BLOCKED';
-    reqJSON.msg = '用户已被封禁';
+    resJSON.errcode = 'USER_BLOCKED';
+    resJSON.msg = '用户已被封禁';
   } else if (result == 'LOGIN_SUCCESS') {
-    reqJSON.token = genJWT({ username, expireTime: 60 * 30 });
-    reqJSON.user = getUserInformation({ username })
-    reqJSON.msg = '登录成功';
+    resJSON.token = genJWT({ username, expireTime: 60 * 30 });
+    resJSON.user = getUserInformation({ username })
+    resJSON.msg = '登录成功';
   }
 
-  res.status(200).json(reqJSON);
+  res.status(200).json(resJSON);
 });
 
 // user register
@@ -61,19 +61,36 @@ router.post('/register', (req, res) => {
   res.status(200).json(reqJSON);
 });
 
-// 验证token
-router.post('/verifyToken', (req, res) => {
-  const { username, token } = req.body;
+// 获取当前用户信息
+router.post('/getUserInfo', (req, res) => {
+  const { username } = req.body;
+  const token = req.headers.authorization;
 
+  const resJSON = verifyToken({username, token});
+
+  if (resJSON.errcode != undefined) {
+    return resJSON;
+  }
+
+  resJSON.user = getUserInformation({ username });
+
+  res.status(200).json(resJSON);
+});
+
+// 验证token
+const verifyToken = ({username, token}) => {
   let reqJSON = {
-    api: 'verifyToken',
+    api: 'getUserInfo',
     msg: '未知错误',
   }
 
   const result = verifyJWT(token);
 
   // 如果验证不通过
-  if (result == 'INVAILD_JWT') {
+  if (result == 'FORMAT_WRONG_JWT') {
+    reqJSON.errcode = 'FORMAT_WRONG_JWT';
+    reqJSON.msg = '错误格式的JWT';
+  } else if (result == 'INVAILD_JWT') {
     reqJSON.errcode = 'INVALID_JWT';
     reqJSON.msg = '错误的JSON Web Token';
   } else if (result == 'EXPIRED_JWT') {
@@ -86,7 +103,7 @@ router.post('/verifyToken', (req, res) => {
     reqJSON.msg = '正确的JSON Web Token';
   }
 
-  res.status(200).json(reqJSON);
-});
+  return reqJSON;
+}
 
 export default router;
