@@ -33,7 +33,8 @@ router.post('/login', (req, res) => {
     resJSON.errcode = 'USER_BLOCKED';
     resJSON.msg = '用户已被封禁';
   } else if (result == 'LOGIN_SUCCESS') {
-    resJSON.token = genJWT({ username, expireTime: 60 * 30 });
+    // token过期时间，不传为30分钟
+    resJSON.token = genJWT({ username, expireTime: 60 * 30});
     resJSON.user = getUserInformation({ username })
     resJSON.msg = '登录成功';
   }
@@ -69,7 +70,7 @@ router.post('/getUserInfo', (req, res) => {
   const resJSON = verifyToken({username, token});
 
   if (resJSON.errcode != undefined) {
-    return resJSON;
+    res.status(200).json(resJSON);
   }
 
   resJSON.user = getUserInformation({ username });
