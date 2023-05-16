@@ -85,4 +85,41 @@ const userRegister = ({ username, password, nickname }) => {
   return 'REGISTER_SUCCESS';
 }
 
-export { userLoginValidation, getUserInformation, userRegister }
+// 添加乐谱
+const addNote = ({ title, content, author, comment, category, upload_user }) => {
+  const addNoteStmt = db.prepare(`
+    INSERT INTO 'note' 
+    (title, content, author, comment, category, upload_user) VALUES
+    (?, ?, ?, ?, ?, ?)
+  `).bind([title, content, author, comment, category, upload_user]);
+
+  const info = addNoteStmt.run();
+
+  return 'ADD_NOTE_SUCCESS';
+}
+
+// 获取乐谱
+const getNoteList = ({ username, pageSize, pageNum }) => {
+  let limit = parseInt(pageSize);
+  let offset = parseInt((pageNum - 1) * pageSize);
+  let getNoteListStmt;
+  if (username == undefined) {
+    getNoteListStmt = db.prepare(`
+    SELECT id, title FROM 'note' LIMIT ? OFFSET ?
+    `).bind([limit, offset])
+  } else {
+    getNoteListStmt = db.prepare(`
+    SELECT id, title FROM 'note' WHERE upload_user = ? LIMIT ? OFFSET ?
+    `).bind([username, limit, offset])
+  }
+
+  const noteInfo = getNoteListStmt.all();
+
+  if (noteInfo == undefined) {
+    return [];
+  }
+
+  return noteInfo;
+}
+
+export { userLoginValidation, getUserInformation, userRegister, addNote, getNoteList }

@@ -5,6 +5,7 @@ CREATE TABLE "note" (
 	"category"	TEXT NOT NULL,
 	"content"	TEXT NOT NULL,
 	"comment"	TEXT NOT NULL,
+	"upload_user" TEXT NOT NULL,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 

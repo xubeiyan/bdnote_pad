@@ -2,7 +2,9 @@ import express from "express";
 import {
   userLoginValidation,
   getUserInformation,
-  userRegister
+  userRegister,
+  addNote,
+  getNoteList,
 } from '../database/db_operation.js';
 
 import { genJWT, verifyJWT } from "../utils/jwt.js";
@@ -34,7 +36,7 @@ router.post('/login', (req, res) => {
     resJSON.msg = '用户已被封禁';
   } else if (result == 'LOGIN_SUCCESS') {
     // token过期时间，不传为30分钟
-    resJSON.token = genJWT({ username, expireTime: 60 * 30});
+    resJSON.token = genJWT({ username, expireTime: 60 * 30 });
     resJSON.user = getUserInformation({ username })
     resJSON.msg = '登录成功';
   }
@@ -67,10 +69,13 @@ router.post('/getUserInfo', (req, res) => {
   const { username } = req.body;
   const token = req.headers.authorization;
 
-  const resJSON = verifyToken({username, token});
+  const resJSON = verifyToken({ username, token });
+
+  resJSON.api = 'getUserInfo';
 
   if (resJSON.errcode != undefined) {
     res.status(200).json(resJSON);
+    return;
   }
 
   resJSON.user = getUserInformation({ username });
@@ -79,11 +84,8 @@ router.post('/getUserInfo', (req, res) => {
 });
 
 // 验证token
-const verifyToken = ({username, token}) => {
-  let reqJSON = {
-    api: 'getUserInfo',
-    msg: '未知错误',
-  }
+const verifyToken = ({ username, token }) => {
+  let reqJSON = {};
 
   const result = verifyJWT(token);
 
@@ -97,7 +99,7 @@ const verifyToken = ({username, token}) => {
   } else if (result == 'EXPIRED_JWT') {
     reqJSON.errcode = 'EXPIRED_JWT';
     reqJSON.msg = 'JSON Web Token已过期';
-  } else if (result[0] == 'VERIFIED' && result[1] !== username) {
+  } else if (username !== undefined && result[0] == 'VERIFIED' && result[1] !== username) {
     reqJSON.errcode = 'INVALID_USERNAME';
     reqJSON.msg = 'JSON Web Token用户名不一致';
   } else {
@@ -107,4 +109,55 @@ const verifyToken = ({username, token}) => {
   return reqJSON;
 }
 
+// 添加乐谱
+router.post('/addNote', (req, res) => {
+  const token = req.headers.authorization;
+
+  // 不传username就不验证
+  const resJSON = verifyToken({ token });
+
+  resJSON.api = 'addNote';
+
+  if (resJSON.errcode != undefined) {
+    res.status(200).json(resJSON);
+    return;
+  }
+
+  const { title, content, author, category, comment, username } = req.body;
+
+  if (title == '') {
+    resJSON.errcode = 'NO_TITLE';
+    resJSON.msg = '乐谱没有标题';
+    res.status(200).json(resJSON);
+  }
+
+  addNote({ title, content, author, category, comment, upload_user: username });
+
+  // 成功
+  resJSON.msg = '乐谱提交成功';
+  res.status(200).json(resJSON);
+})
+
+// 查询乐谱
+router.post('/listUserCreatedNote/p/:pageNum/s/:pageSize', (req, res) => {
+  const token = req.headers.authorization;
+  // 不传username就不验证
+  const resJSON = verifyToken({ token });
+
+  resJSON.api = 'listUserCreatedNote';
+
+  if (resJSON.errcode != undefined) {
+    res.status(200).json(resJSON);
+    return;
+  }
+
+  const { username } = req.body;
+  const { pageSize, pageNum } = req.params;
+
+  const data = getNoteList({username, pageNum, pageSize });
+
+  resJSON.msg = '查询成功';
+  resJSON.rows = data;
+  res.status(200).json(resJSON);
+})
 export default router;
