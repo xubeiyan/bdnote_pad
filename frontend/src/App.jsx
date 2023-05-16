@@ -14,6 +14,7 @@ import { useState } from "react";
 import Main from "./pages/Main";
 import Search from "./pages/Search";
 import User from "./pages/User";
+import AddNewNote from './pages/AddNewNote';
 
 function App() {
   const [menu, setMenu] = useState({
@@ -61,6 +62,7 @@ function App() {
             <Route index path='/' element={<Main />} />
             <Route index path='/search' element={<Search />} />
             <Route index path='/user' element={<User />} />
+            <Route index path='/add' element={<AddNewNote />} />
           </Routes>
         </Paper>
         <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}
